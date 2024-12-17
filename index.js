@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const mysql = require('mysql2')
 const { rateLimit } = require("express-rate-limit");
-const ollama = require("ollama")
+const { default: ollama } = require('ollama');
 
 
 const app = express();
