@@ -15,6 +15,7 @@
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "mysql2": "^3.11.5",
-    "ollama": "^0.5.11"
+    "ollama": "^0.5.11",
+    "pmp_v2_backend_node": "file:"
   }
 }

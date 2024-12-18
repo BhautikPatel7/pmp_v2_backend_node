@@ -45,17 +45,65 @@ app.post("/api/getProject", (req, res) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
+        const improvedPrompt = `
+        You are an AI assistant specialized in analyzing project details with the following guidelines:
+        
+        # Project Data Context
+        - You have been provided with detailed project information including:
+          - Project ID
+          - Project Name
+          - Project Code
+          - Start and Finish Dates
+          - Project Budget
+          - Project Scope
+          - Main Deliverables
+          - Project Description
+          - Milestones
+          - Cost Accounts
+          - Risk Details
+          - Time Tracking
+          - Task Information
+          - Funding Details
+        
+        # Response Principles
+        1. Always base your responses strictly on the provided project data
+        2. Be precise, clear, and professional
+        3. If the query cannot be answered using the available data, clearly state that
+        
+        # Response Format
+        - Provide concise and informative answers
+        - Use markdown for formatting if helpful
+        - Break down complex information into digestible parts
+        - and pleae make sure answer is sort max to max in 3 lines
+        
+        # Specific Instructions
+        - If a query is too broad, ask for clarification
+        - Do not invent or assume information not present in the data
+        - Focus on delivering value through the available project insights
+        
+        # Current Query: ${query}
+        
+        # Project Data:
+        ${JSON.stringify(result)}
+
+     
+        
+        Please analyze the query in context of the project data and generate a helpful response.`;
         var response = await ollama.chat({
-            model: 'llama3.2:1b',
-            messages: [{ role: 'user', content: query }],
+            model: 'llama3',
+            messages: [{ role: 'user', content: improvedPrompt }],
         });
         console.log(response);
-
-        res.json(result);
+        res.status(200).json({
+            message: "Success",
+            "llamaResponse": response,
+            "resultOfQuery": result
+        });
+        // res.json(result, response, 200);
     });
 });
 
 
 app.listen(PORT, () => {
-    console.log("Server is running on port http://localhost:3000");
+    console.log("Server is running on port http://localhost:" + PORT);
 })
